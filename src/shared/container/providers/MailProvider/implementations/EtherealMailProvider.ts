@@ -13,31 +13,19 @@ export default class EtherealMailProvider implements IMailProvider {
     @inject('MailTemplateProvider')
     private mailTemplateProvider: IMailTemplateProvider,
   ) {
-    nodemailer
-      .createTestAccount()
-      .then(account => {
-        console.log(account);
-        const transporter = nodemailer.createTransport({
-          host: account.smtp.host,
-          port: account.smtp.port,
-          secure: account.smtp.secure,
-          auth: {
-            user: account.user,
-            pass: account.pass,
-          },
-        });
+    // Created transporter manually
+    // createTestAccount() was offline
+    // check commit after 6761652c73c98e7972a4484e37174306ad7d1193
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.ethereal.email',
+      port: 587,
+      auth: {
+        user: process.env.ETHEREAL_USER,
+        pass: process.env.ETHEREAL_PASS,
+      },
+    });
 
-        this.client = transporter;
-      })
-      .catch(err => {
-        console.log('\n\n');
-        console.log(
-          '\x1b[1m\x1b[41m%s\x1b[0m',
-          "Angelo, this error below is a Nodemailer issue. I couldn't find the answer. Good luck with that.",
-        );
-        console.log('\n\n');
-        console.log(err);
-      });
+    this.client = transporter;
   }
 
   public async sendMail({
