@@ -6,26 +6,38 @@ import IMailProvider from '../models/IMailProvider';
 import ISendMailDTO from '../dtos/ISendMailDTO';
 
 @injectable()
-export default class FakeMailProvider implements IMailProvider {
+export default class EtherealMailProvider implements IMailProvider {
   private client: Transporter;
 
   constructor(
     @inject('MailTemplateProvider')
     private mailTemplateProvider: IMailTemplateProvider,
   ) {
-    nodemailer.createTestAccount().then(account => {
-      const transporter = nodemailer.createTransport({
-        host: account.smtp.host,
-        port: account.smtp.port,
-        secure: account.smtp.secure,
-        auth: {
-          user: account.user,
-          pass: account.pass,
-        },
-      });
+    nodemailer
+      .createTestAccount()
+      .then(account => {
+        console.log(account);
+        const transporter = nodemailer.createTransport({
+          host: account.smtp.host,
+          port: account.smtp.port,
+          secure: account.smtp.secure,
+          auth: {
+            user: account.user,
+            pass: account.pass,
+          },
+        });
 
-      this.client = transporter;
-    });
+        this.client = transporter;
+      })
+      .catch(err => {
+        console.log('\n\n');
+        console.log(
+          '\x1b[1m\x1b[41m%s\x1b[0m',
+          "Angelo, this error below is a Nodemailer issue. I couldn't find the answer. Good luck with that.",
+        );
+        console.log('\n\n');
+        console.log(err);
+      });
   }
 
   public async sendMail({
