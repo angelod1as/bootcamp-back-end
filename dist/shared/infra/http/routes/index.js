@@ -22,6 +22,12 @@ var _profile = _interopRequireDefault(require("../../../../modules/users/infra/h
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const routes = (0, _express.Router)();
+routes.get('/', (req, res) => {
+  console.log('GOT');
+  res.json({
+    message: 'running!'
+  });
+});
 routes.use('/appointments', _appointments.default);
 routes.use('/providers', _providers.default);
 routes.use('/users', _users.default);

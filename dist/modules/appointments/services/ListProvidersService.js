@@ -11,6 +11,8 @@ var _ICacheProvider = _interopRequireDefault(require("../../../shared/container/
 
 var _IUsersRepository = _interopRequireDefault(require("../../users/repositories/IUsersRepository"));
 
+var _classTransformer = require("class-transformer");
+
 var _dec, _dec2, _dec3, _dec4, _dec5, _class;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -34,7 +36,7 @@ let ListProvidersService = (_dec = (0, _tsyringe.injectable)(), _dec2 = function
       users = await this.usersRepository.findAllProviders({
         except_user_id: user_id
       });
-      await this.cacheProvider.save(`providers-list:${user_id}`, users);
+      await this.cacheProvider.save(`providers-list:${user_id}`, (0, _classTransformer.classToClass)(users));
     }
 
     return users;
